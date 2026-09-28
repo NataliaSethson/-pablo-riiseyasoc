@@ -26,19 +26,23 @@ export default function Formulario({ proyectoPredefinido = '' }) {
     e.preventDefault();
     setCargando(true);
 
-    const encode = (data) => {
-      return Object.keys(data)
-        .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&');
-    };
+    const formBody = new URLSearchParams({
+      'form-name': 'contacto-riise',
+      ...formData
+    }).toString();
 
     try {
-      await fetch('/__forms.html', {
+      const res = await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'contacto-riise', ...formData }),
+        body: formBody,
       });
 
+      if (!res.ok) {
+        throw new Error(`Error en el servidor de Netlify: ${res.status}`);
+      }
+
+      // Registro del evento en dataLayer para GTM / Google Ads
       if (typeof window !== 'undefined') {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
@@ -52,17 +56,28 @@ export default function Formulario({ proyectoPredefinido = '' }) {
         });
       }
 
+      // Redirección a la página de gracias
       router.push('/gracias');
+
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      alert('Ocurrió un error al enviar la consulta.');
+      console.error('Error enviando formulario a Netlify:', error);
+      alert('Ocurrió un error al enviar el formulario. Por favor reintentá.');
       setCargando(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      name="contacto-riise"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      className="space-y-4"
+    >
       <input type="hidden" name="form-name" value="contacto-riise" />
+      <p className="hidden">
+        <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+      </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
