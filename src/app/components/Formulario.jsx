@@ -3,6 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Lista de proyectos disponibles para el desplegable
+const LISTA_PROYECTOS = [
+  'Ítalo II',
+  'P788',
+  'Edificio Torre',
+  'Complejo Residencial',
+  'Consulta General'
+];
+
 export default function Formulario({ proyectoPredefinido = '' }) {
   const router = useRouter();
 
@@ -10,10 +19,11 @@ export default function Formulario({ proyectoPredefinido = '' }) {
     nombre: '',
     telefono: '',
     email: '',
-    proyecto: proyectoPredefinido,
+    proyecto: proyectoPredefinido || LISTA_PROYECTOS[0],
     mensaje: ''
   });
 
+  const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
@@ -22,8 +32,65 @@ export default function Formulario({ proyectoPredefinido = '' }) {
     }
   }, [proyectoPredefinido]);
 
+  // Manejo de cambio en el teléfono (solo números y caracteres telefónicos)
+  const handleTelefonoChange = (e) => {
+    const valorSinLetras = e.target.value.replace(/[^0-9+\s()-]/g, '');
+    setFormData((prev) => ({ ...prev, telefono: valorSinLetras }));
+
+    // Limpiar error de teléfono mientras escribe si alcanza la longitud mínima
+    const soloNumeros = valorSinLetras.replace(/\D/g, '');
+    if (soloNumeros.length >= 8 && errores.telefono) {
+      setErrores((prev) => ({ ...prev, telefono: null }));
+    }
+  };
+
+  // Manejo de cambio en el email
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setFormData((prev) => ({ ...prev, email: val }));
+
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (regexEmail.test(val) && errores.email) {
+      setErrores((prev) => ({ ...prev, email: null }));
+    }
+  };
+
+  // Función de validación general antes de enviar
+  const validarFormulario = () => {
+    const nuevosErrores = {};
+
+    // Nombre
+    if (!formData.nombre.trim()) {
+      nuevosErrores.nombre = 'Ingresá tu nombre completo.';
+    }
+
+    // Teléfono (debe tener al menos 8 dígitos numéricos)
+    const soloNumeros = formData.telefono.replace(/\D/g, '');
+    if (!formData.telefono.trim()) {
+      nuevosErrores.telefono = 'El teléfono es obligatorio.';
+    } else if (soloNumeros.length < 8) {
+      nuevosErrores.telefono = 'Ingresá un teléfono válido (mínimo 8 dígitos).';
+    }
+
+    // Email
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      nuevosErrores.email = 'El correo electrónico es obligatorio.';
+    } else if (!regexEmail.test(formData.email)) {
+      nuevosErrores.email = 'Ingresá una dirección de correo válida.';
+    }
+
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validarFormulario()) {
+      return;
+    }
+
     setCargando(true);
 
     try {
@@ -71,64 +138,98 @@ export default function Formulario({ proyectoPredefinido = '' }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Nombre */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Nombre Completo *</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+            Nombre Completo *
+          </label>
           <input
             type="text"
             name="nombre"
-            required
             placeholder="Ej: Juan Pérez"
             value={formData.nombre}
-            onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-            className="w-full bg-[#06182a] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]"
+            onChange={(e) => {
+              setFormData({ ...formData, nombre: e.target.value });
+              if (errores.nombre) setErrores((prev) => ({ ...prev, nombre: null }));
+            }}
+            className={`w-full bg-[#06182a] border ${
+              errores.nombre ? 'border-red-500' : 'border-slate-700'
+            } rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]`}
           />
+          {errores.nombre && (
+            <p className="text-red-400 text-xs mt-1 font-medium">{errores.nombre}</p>
+          )}
         </div>
 
+        {/* Teléfono */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Teléfono / WhatsApp *</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+            Teléfono / WhatsApp *
+          </label>
           <input
             type="tel"
             name="telefono"
-            required
-            placeholder="Ej: 387 1234567"
+            placeholder="Ej: +54 9 387 1234567"
             value={formData.telefono}
-            onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-            className="w-full bg-[#06182a] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]"
+            onChange={handleTelefonoChange}
+            className={`w-full bg-[#06182a] border ${
+              errores.telefono ? 'border-red-500' : 'border-slate-700'
+            } rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]`}
           />
+          {errores.telefono && (
+            <p className="text-red-400 text-xs mt-1 font-medium">{errores.telefono}</p>
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Email */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Correo Electrónico *</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+            Correo Electrónico *
+          </label>
           <input
             type="email"
             name="email"
-            required
             placeholder="ejemplo@correo.com"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full bg-[#06182a] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]"
+            onChange={handleEmailChange}
+            className={`w-full bg-[#06182a] border ${
+              errores.email ? 'border-red-500' : 'border-slate-700'
+            } rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]`}
           />
+          {errores.email && (
+            <p className="text-red-400 text-xs mt-1 font-medium">{errores.email}</p>
+          )}
         </div>
 
+        {/* Proyecto */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Proyecto de Interés</label>
-          <input
-            type="text"
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+            Proyecto de Interés
+          </label>
+          <select
             name="proyecto"
-            placeholder="Ej: Ítalo II, P788, etc."
             value={formData.proyecto}
             onChange={(e) => setFormData({ ...formData, proyecto: e.target.value })}
-            className="w-full bg-[#06182a] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#e31c23]"
-          />
+            className="w-full bg-[#06182a] border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#e31c23] cursor-pointer"
+          >
+            {LISTA_PROYECTOS.map((proy) => (
+              <option key={proy} value={proy} className="bg-[#06182a] text-white">
+                {proy}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
+      {/* Mensaje */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Mensaje o Consulta (Opcional)</label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+          Mensaje o Consulta (Opcional)
+        </label>
         <textarea
           name="mensaje"
           rows="3"
