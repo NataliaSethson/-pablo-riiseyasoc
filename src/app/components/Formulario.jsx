@@ -33,14 +33,12 @@ export default function Formulario({ proyectoPredefinido = '' }) {
     };
 
     try {
-      // 1. Enviar datos a Netlify Forms
-      await fetch('/', {
+      await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encode({ 'form-name': 'contacto-riise', ...formData }),
       });
 
-      // 2. Registro del evento en dataLayer para GTM / Google Ads
       if (typeof window !== 'undefined') {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
@@ -54,23 +52,16 @@ export default function Formulario({ proyectoPredefinido = '' }) {
         });
       }
 
-      // 3. Redireccionar a la página de gracias
       router.push('/gracias');
-
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
-      alert('Ocurrió un error al enviar el formulario. Intentalo de nuevo.');
+      alert('Ocurrió un error al enviar la consulta.');
       setCargando(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      name="contacto-riise"
-      data-netlify="true"
-      className="space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input type="hidden" name="form-name" value="contacto-riise" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
