@@ -26,59 +26,52 @@ export default function Formulario({ proyectoPredefinido = '' }) {
     e.preventDefault();
     setCargando(true);
 
-    const formBody = new URLSearchParams({
-      'form-name': 'contacto-riise',
-      ...formData
-    }).toString();
-
     try {
-      const res = await fetch('/__forms.html', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formBody,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: '25030dee-78bf-4f34-86b5-709915b6f1e1',
+          subject: `Nuevo contacto landing - ${formData.proyecto || 'Consulta General'}`,
+          from_name: 'Pablo Ugolini Landing',
+          ...formData
+        })
       });
 
-      if (!res.ok) {
-        throw new Error(`Error en el servidor de Netlify: ${res.status}`);
+      const result = await res.json();
+
+      if (result.success) {
+        // Evento DataLayer para Google Ads / GTM
+        if (typeof window !== 'undefined') {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'generate_lead',
+            form_location: 'landing_pablo_ugolini',
+            proyecto_interes: formData.proyecto || 'Consulta General',
+            user_data: {
+              email: formData.email,
+              phone_number: formData.telefono
+            }
+          });
+        }
+
+        router.push('/gracias');
+      } else {
+        alert('Hubo un inconveniente al enviar la consulta.');
+        setCargando(false);
       }
-
-      // Registro del evento en dataLayer para GTM / Google Ads
-      if (typeof window !== 'undefined') {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: 'generate_lead',
-          form_location: 'landing_pablo_ugolini',
-          proyecto_interes: formData.proyecto || 'Consulta General',
-          user_data: {
-            email: formData.email,
-            phone_number: formData.telefono
-          }
-        });
-      }
-
-      // Redirección a la página de gracias
-      router.push('/gracias');
-
     } catch (error) {
-      console.error('Error enviando formulario a Netlify:', error);
-      alert('Ocurrió un error al enviar el formulario. Por favor reintentá.');
+      console.error('Error al enviar:', error);
+      alert('Error de conexión. Intentalo nuevamente.');
       setCargando(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      name="contacto-riise"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
-      className="space-y-4"
-    >
-      <input type="hidden" name="form-name" value="contacto-riise" />
-      <p className="hidden">
-        <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
-      </p>
-
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Nombre Completo *</label>
