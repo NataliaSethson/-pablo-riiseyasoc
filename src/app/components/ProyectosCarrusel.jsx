@@ -1,3 +1,4 @@
+// src/components/ProyectosCarrusel.jsx
 'use client';
 
 import { useState } from 'react';
@@ -7,17 +8,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) {
   const [indexActual, setIndexActual] = useState(0);
   const [modoDetalle, setModoDetalle] = useState(false);
+  const [indiceGaleria, setIndiceGaleria] = useState(0);
 
   if (!proyectos || proyectos.length === 0) return null;
 
   const projActual = proyectos[indexActual];
 
+  // Asegurar compatibilidad si algún proyecto no tiene galería definida todavía
+  const galeriaActual = projActual.galeria && projActual.galeria.length > 0 
+    ? projActual.galeria 
+    : [projActual.portada || projActual.imagen];
+
   const siguienteProyecto = () => {
     setIndexActual((prev) => (prev + 1) % proyectos.length);
+    setIndiceGaleria(0); // Reiniciar galería al cambiar de proyecto
   };
 
   const anteriorProyecto = () => {
     setIndexActual((prev) => (prev - 1 + proyectos.length) % proyectos.length);
+    setIndiceGaleria(0);
+  };
+
+  const siguienteFotoGaleria = () => {
+    setIndiceGaleria((prev) => (prev + 1) % galeriaActual.length);
+  };
+
+  const anteriorFotoGaleria = () => {
+    setIndiceGaleria((prev) => (prev - 1 + galeriaActual.length) % galeriaActual.length);
   };
 
   const registrarClicWspProyecto = (nombreProyecto) => {
@@ -32,43 +49,43 @@ export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) 
   };
 
   return (
-    <section id="proyectos" className="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
+    <section id="proyectos" className="w-full">
       
-      <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-slate-800 bg-[#06182a] min-h-[550px] flex items-center">
+      {/* Contenedor principal sin fondo azul fijo para evitar destellos cuando cambia a detalle */}
+      <div className="relative overflow-hidden w-full">
         
         <AnimatePresence mode="wait">
           {!modoDetalle ? (
-            /* VISTA 1: CARRUSEL INMERSIVO */
+            /* VISTA 1: CARRUSEL INMERSIVO A ANCHO COMPLETO (Usa Portada) con mayor altura */
             <motion.div
               key={`carrusel-${projActual.id}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="relative w-full h-[550px] flex items-end p-8 sm:p-14"
+              className="relative w-full h-[700px] flex items-end p-8 sm:p-20 bg-[#06182a]"
             >
               <Image
-                src={projActual.imagen}
+                src={projActual.portada || projActual.imagen}
                 alt={projActual.nombre}
                 fill
                 className="object-cover object-center"
                 priority
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#06182a] via-[#06182a]/40 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#06182a] via-[#06182a]/50 to-black/30" />
 
-              <div className="relative z-10 space-y-4 max-w-xl">
-                <span className="text-[#e31c23] text-sm font-semibold tracking-wider block uppercase">
-                  Proyectos
-                </span>
-
+              <div className="relative z-10 space-y-4 max-w-3xl mx-auto w-full">
                 <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
                   {projActual.nombre}
                 </h2>
 
                 <div className="pt-2">
                   <button
-                    onClick={() => setModoDetalle(true)}
+                    onClick={() => {
+                      setModoDetalle(true);
+                      setIndiceGaleria(0);
+                    }}
                     className="bg-[#e31c23] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full transition-transform duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg"
                   >
                     <span>Conocé más</span>
@@ -90,58 +107,94 @@ export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) 
                     ))}
                   </div>
                   <span className="text-white font-extrabold text-sm tracking-wide">
-                    {projActual.avance}%
+                    {projActual.avance}% Avance
                   </span>
                 </div>
               </div>
 
               <button
                 onClick={siguienteProyecto}
-                className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-white text-slate-900 hover:bg-[#e31c23] hover:text-white p-3.5 rounded-full shadow-2xl transition duration-300"
+                className="absolute right-8 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-[#e31c23] text-white p-4 rounded-full backdrop-blur-md transition duration-300"
                 aria-label="Siguiente"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" />
                 </svg>
               </button>
 
               <button
                 onClick={anteriorProyecto}
-                className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white text-white hover:text-slate-900 p-3.5 rounded-full backdrop-blur-md transition duration-300"
+                className="absolute left-8 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-[#e31c23] text-white p-4 rounded-full backdrop-blur-md transition duration-300"
                 aria-label="Anterior"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
             </motion.div>
           ) : (
-            /* VISTA 2: DETALLE Y FICHA TÉCNICA */
+            /* VISTA 2: DETALLE Y FICHA TÉCNICA (Fondo blanco absoluto, sin azul) */
             <motion.div
               key={`detalle-${projActual.id}`}
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.4 }}
-              className="w-full grid grid-cols-1 lg:grid-cols-12 min-h-[550px] bg-white text-slate-900"
+              className="w-full grid grid-cols-1 lg:grid-cols-12 min-h-[700px] bg-white text-slate-900 overflow-hidden shadow-2xl"
             >
-              <div className="lg:col-span-5 relative min-h-[350px] lg:min-h-full">
+              {/* Columna Izquierda: Imagen de galería a altura completa de arriba a abajo */}
+              <div className="lg:col-span-6 relative min-h-[400px] lg:min-h-[700px] bg-slate-900 overflow-hidden">
                 <Image
-                  src={projActual.imagen}
-                  alt={projActual.nombre}
+                  src={galeriaActual[indiceGaleria]}
+                  alt={`${projActual.nombre} - Foto ${indiceGaleria + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-cover object-center w-full h-full transition-opacity duration-500"
                 />
-                
+
                 <button
                   onClick={() => setModoDetalle(false)}
-                  className="absolute top-4 left-4 z-20 bg-[#06182a]/80 hover:bg-[#e31c23] text-white px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md transition flex items-center gap-1.5"
+                  className="absolute top-4 left-4 z-20 bg-[#06182a]/80 hover:bg-[#e31c23] text-white px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md transition flex items-center gap-1.5 shadow-md"
                 >
-                  <span>‹</span> Volver al carrusel
+                  <span>‹</span> Ver todos los proyectos
                 </button>
+
+                {/* Controles de la galería si tiene más de 1 imagen */}
+                {galeriaActual.length > 1 && (
+                  <>
+                    <button
+                      onClick={anteriorFotoGaleria}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black text-white p-2.5 rounded-full transition"
+                      aria-label="Foto anterior"
+                    >
+                      ❮
+                    </button>
+                    <button
+                      onClick={siguienteFotoGaleria}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black text-white p-2.5 rounded-full transition"
+                      aria-label="Foto siguiente"
+                    >
+                      ❯
+                    </button>
+
+                    {/* Indicadores de puntos inferiores en la foto */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                      {galeriaActual.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setIndiceGaleria(idx)}
+                          className={`w-2.5 h-2.5 rounded-full transition-all ${
+                            indiceGaleria === idx ? 'bg-white scale-125' : 'bg-white/50'
+                          }`}
+                          aria-label={`Ir a foto ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
 
-              <div className="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-between space-y-6">
+              {/* Columna Derecha: Información y Ficha Técnica con fondo estrictamente blanco */}
+              <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-6 bg-white">
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-start gap-4">

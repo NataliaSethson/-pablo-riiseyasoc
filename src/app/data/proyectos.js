@@ -9,7 +9,12 @@ export const proyectosData = [
     detalles: 'Monoambientes (desde 32,53 m²), 1 Dormitorio (hasta 63,80 m²) y 2 Dormitorios (hasta 89,96 m²). Calefacción central individual por caldera mural con radiadores de aluminio.',
     avance: 80,
     amenities: ['Piscina', 'Solárium', 'Quincho con Asador', 'Calefacción Central', 'Cochera', 'Seguridad'],
-    imagen: '/proyectos/italo.jpg'
+    portada: '/proyectos/italo.png',
+    galeria: [
+      '/proyectos/italo2.jpg',
+      '/proyectos/italo3.jpg',
+      '/proyectos/italo4.jpg'
+    ]
   },
   { 
     id: 2,
@@ -19,17 +24,28 @@ export const proyectosData = [
     detalles: 'Unidades de 1 Dormitorio (desde 38,03 m² a 51,05 m²) y 2 Dormitorios (desde 64,32 m² a 100,13 m²). Incorpora lockers para ropa blanca/valijas y cerraduras digitales.',
     avance: 65,
     amenities: ['Lockers', 'Cerraduras Digitales', 'Cámaras de Seguridad', 'Calefacción', 'Cochera'],
-    imagen: '/proyectos/deanfunes.jpg'
+    portada: '/proyectos/funes.png',
+    galeria: [
+      '/proyectos/funes2.jpg',
+      '/proyectos/funes3.jpg',
+      '/proyectos/funes4.jpg'
+    ]
   },
   { 
     id: 3,
-    nombre: 'Pueyrredón 788 (P788)', 
+    nombre: 'Pueyrredón 788', 
     ubicacion: 'Pueyrredón 788',
     desc: 'Ubicación privilegiada pensada para ofrecer una experiencia de vida superior. Posee 48 unidades en 8 niveles y 1 local comercial en planta baja.',
     detalles: 'Unidades de 1 Dormitorio (desde 40,50 m² a 65,86 m²) y 2 Dormitorios (77,00 m² a 78,36 m²). Excelentes terminaciones, carpintería de aluminio y revestimientos de porcelanato.',
     avance: 95,
     amenities: ['Terraza', 'Quincho', 'Calefacción Central', 'Cochera', 'Seguridad'],
-    imagen: '/proyectos/pueyrredon.jpg'
+    portada: '/proyectos/pueyrredon.png',
+    galeria: [
+      '/proyectos/pueyrredon2.jpg',
+      '/proyectos/pueyrredon3.jpg',
+      '/proyectos/pueyrredon4.jpg',
+      '/proyectos/pueyrredon5.jpg'
+    ]
   },
   { 
     id: 4,
@@ -39,7 +55,10 @@ export const proyectosData = [
     detalles: 'Unidades de 1 Dormitorio (desde 42,80 m² a 51,67 m²) y 2 Dormitorios (68,40 m²). Equipadas con calderas murales, radiadores de aluminio y aperturas de aluminio.',
     avance: 100,
     amenities: ['Calefacción Central', 'Cochera', 'Seguridad'],
-    imagen: '/proyectos/25demayo.jpg'
+    portada: '/proyectos/25demayo.png',
+    galeria: [
+      '/proyectos/25demayo.png',
+    ]
   },
   { 
     id: 5,
@@ -49,16 +68,24 @@ export const proyectosData = [
     detalles: 'Monoambientes (desde 32,40 m² a 36,89 m²) y 1 Dormitorio (desde 45,08 m² a 69,49 m²). Muebles sobre/bajo mesada en melamina, mesada de piedra natural y grifería monocomando.',
     avance: 40,
     amenities: ['Coffee Bar', 'Solárium', 'Quincho', 'Calefacción', 'Seguridad'],
-    imagen: '/proyectos/entrerios.jpg'
+    portada: '/proyectos/entrerios.png',
+    galeria: [
+      '/proyectos/entrerios2.jpg',
+      '/proyectos/entrerios3.jpg'
+    ]
   },
   { 
     id: 6,
-    nombre: 'Vicente López 954 (V954)', 
+    nombre: 'Vicente López 954 ', 
     ubicacion: 'Vicente López 954',
-    desc: 'Diseñado para ofrecer bienestar, confort y seguridad. Presenta 42 unidades distribuidas en 8 niveles, 1 local comercial y espacios verdes.',
-    detalles: 'Unidades de 1 Dormitorio (desde 47,08 m² a 71,36 m²), 2 Dormitorios (70,23 m²) y 3 Dormitorios (107,69 m²). Incluye balcones con parrilla y amplias vistas.',
+    desc: 'Vicente López 954',
+    detalles: 'Diseñado para ofrecer bienestar, confort y seguridad. Presenta 42 unidades distribuidas en 8 niveles, 1 local comercial y espacios verdes.',
     avance: 30,
     amenities: ['Espacios Verdes', 'Terraza', 'Quincho', 'Calefacción Central', 'Cochera', 'Seguridad'],
-    imagen: '/proyectos/vicentelopez.jpg'
+    portada: '/proyectos/lopez.png',
+    galeria: [
+      '/proyectos/lopez2.jpg',
+      '/proyectos/lopez3.jpg'
+    ]
   }
 ];

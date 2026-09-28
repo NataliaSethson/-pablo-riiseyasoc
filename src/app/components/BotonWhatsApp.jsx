@@ -23,7 +23,7 @@ export default function BotonWhatsApp() {
       rel="noopener noreferrer"
       onClick={registrarClic}
       aria-label="Contactar por WhatsApp"
-      className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20ba5a] text-white p-4 rounded-full shadow-2xl transition-transform duration-300 transform hover:scale-110 flex items-center justify-center group"
+      className="fixed bottom-6 right-6 z-50 bg-[#e31c23] hover:bg-red-700 text-white p-4 rounded-full shadow-2xl transition-transform duration-300 transform hover:scale-110 flex items-center justify-center group"
     >
       <svg
         className="w-7 h-7 fill-current"
