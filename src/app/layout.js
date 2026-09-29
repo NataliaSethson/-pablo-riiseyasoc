@@ -16,10 +16,12 @@ export const metadata = {
   description: "Asesoramiento profesional en inversiones inmobiliarias y proyectos exclusivos con Riise y Asociados.",
   icons: {
     icon: [
-      { url: '/favicon.png', type: 'image/png' }
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '192x192', type: 'image/png' }, // Ideal para asegurar nitidez
     ],
-    shortcut: ['/favicon.png'],
-    apple: ['/favicon.png'],
+    apple: [
+      { url: '/favicon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 

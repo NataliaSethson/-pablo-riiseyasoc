@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 
 // Lista de proyectos disponibles para el desplegable
 const LISTA_PROYECTOS = [
-  'Ítalo II',
-  'P788',
-  'Edificio Torre',
-  'Complejo Residencial',
-  'Consulta General'
+  'Entre Rios 940',
+  'Italo II',
+  'Vicente López 954',
+  'Pueyrredón 788',
+  'Dean Funes 1172',
+  '25 de Mayo 743'
 ];
 
 export default function Formulario({ proyectoPredefinido = '' }) {

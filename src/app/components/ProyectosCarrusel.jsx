@@ -1,7 +1,7 @@
 // src/components/ProyectosCarrusel.jsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -9,6 +9,7 @@ export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) 
   const [indexActual, setIndexActual] = useState(0);
   const [modoDetalle, setModoDetalle] = useState(false);
   const [indiceGaleria, setIndiceGaleria] = useState(0);
+  const [pausado, setPausado] = useState(false);
 
   if (!proyectos || proyectos.length === 0) return null;
 
@@ -37,6 +38,17 @@ export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) 
     setIndiceGaleria((prev) => (prev - 1 + galeriaActual.length) % galeriaActual.length);
   };
 
+  // AUTOPLAY: Cambia de proyecto cada 5 segundos si no estamos en modo detalle y no está pausado
+  useEffect(() => {
+    if (modoDetalle || pausado) return;
+
+    const intervalo = setInterval(() => {
+      siguienteProyecto();
+    }, 5000); // 5000ms = 5 segundos
+
+    return () => clearInterval(intervalo);
+  }, [indexActual, modoDetalle, pausado]);
+
   const registrarClicWspProyecto = (nombreProyecto) => {
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || [];
@@ -49,7 +61,12 @@ export default function ProyectosCarrusel({ proyectos = [], solicitarDossier }) 
   };
 
   return (
-    <section id="proyectos" className="w-full">
+    <section 
+      id="proyectos" 
+      className="w-full"
+      onMouseEnter={() => setPausado(true)}
+      onMouseLeave={() => setPausado(false)}
+    >
       
       {/* Contenedor principal sin fondo azul fijo para evitar destellos cuando cambia a detalle */}
       <div className="relative overflow-hidden w-full">
