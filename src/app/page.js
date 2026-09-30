@@ -94,9 +94,9 @@ export default function Home() {
             transition={{ duration: 0.7 }}
             className="lg:col-span-7 w-full flex justify-start"
           >
-            <div className="relative w-full h-[580px] lg:h-[660px] rounded-2xl overflow-hidden shadow-2xl bg-[#0f2c4f] border-0 group">
+            <div className="relative w-full h-[580px] lg:h-[800px] rounded-2xl overflow-hidden shadow-2xl bg-[#0f2c4f] border-0 group">
               <Image
-                src="/pablo.jpeg"
+                src="/pablo.png"
                 alt="Pablo Ugolini - Ejecutivo Comercial"
                 fill
                 className="object-cover object-top transition-transform duration-500 group-hover:scale-105"

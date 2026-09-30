@@ -7,7 +7,7 @@ export const proyectosData = [
     ubicacion: 'Belgrano 1541',
     desc: 'A solo unas cuadras del centro de la ciudad, Italo II se destaca por su diseño moderno y su propuesta de confort integral. Ofrece piscina, solárium, espacios verdes, quincho con asador, calefacción central, cocheras y seguridad, todo pensado para elevar tu inversión y calidad de vida.',
     detalles: 'Más de 50 unidades distribuidas en 8 niveles. Presenta monoambientes (desde 32,53 m²) y departamentos de 1 y 2 dormitorios, con excelentes terminaciones y detalles de categoría.',
-    avance: 80,
+    avance: 20,
     amenities: ['Piscina', 'Solárium', 'Espacios Verdes', 'Quincho con Asador', 'Calefacción Central', 'Cochera', 'Seguridad'],
     portada: '/proyectos/italo.png',
     galeria: [
@@ -22,7 +22,7 @@ export const proyectosData = [
     ubicacion: 'Deán Funes 1172',
     desc: 'Diseñado y desarrollado con características exclusivas que optimizan el alquiler temporario. Incorpora lockers para ropa blanca y valijas, cerraduras digitales y cámaras de seguridad, ofreciendo practicidad, confort y tranquilidad.',
     detalles: '36 unidades distribuidas en 8 niveles. Unidades de 1 Dormitorio (desde 38,03 m² hasta 47,43 m²) y 2 Dormitorios (desde 64,32 m² hasta 100,13 m²).',
-    avance: 65,
+    avance: 100,
     amenities: ['Lockers', 'Cerraduras Digitales', 'Cámaras de Seguridad', 'Calefacción', 'Cochera'],
     portada: '/proyectos/funes.png',
     galeria: [
@@ -66,7 +66,7 @@ export const proyectosData = [
     ubicacion: 'Entre Ríos 940',
     desc: 'Ubicado sobre una avenida de alto tránsito y frente al emblemático Monoblock, este proyecto se destaca por su conectividad privilegiada en un entorno de gran valor cultural y comercial.',
     detalles: '56 unidades distribuidas en 6 niveles. Cuenta con un local de café en planta baja, amenities en terraza, monoambientes y unidades de un dormitorio (desde 32,40 m² hasta 69,49 m²).',
-    avance: 40,
+    avance: 10,
     amenities: ['Coffee Bar', 'Solárium', 'Quincho', 'Calefacción', 'Seguridad'],
     portada: '/proyectos/entrerios.png',
     galeria: [
@@ -80,7 +80,7 @@ export const proyectosData = [
     ubicacion: 'Vicente López 954',
     desc: 'V954 cuenta con detalles y terminaciones de primer nivel pensados para brindarte confort y una experiencia de vida superior en una ubicación privilegiada.',
     detalles: '42 unidades distribuidas en 8 niveles, junto a 1 local comercial. Incluye terraza, espacios verdes, quincho, cocheras y sistema de calefacción central.',
-    avance: 30,
+    avance: 95,
     amenities: ['Espacios Verdes', 'Terraza', 'Quincho', 'Calefacción Central', 'Cochera', 'Seguridad'],
     portada: '/proyectos/lopez.png',
     galeria: [
